@@ -74,9 +74,34 @@ with torch.inference_mode():
 * See [rspin/model.py](https://github.com/vectominist/rspin/blob/main/rspin/model.py) for more information.
 
 
+## Application: S3PRL
+We use the [s3prl](https://github.com/s3prl/s3prl) toolkit for [SUPERB](https://arxiv.org/abs/2105.01051) downstream tasks.
+1. Modify [line 24](https://github.com/vectominist/rspin/blob/main/s3prl_py/rspin/expert.py#L24) of [`s3prl_py/rspin/expert.py`](https://github.com/vectominist/rspin/blob/main/s3prl_py/rspin/expert.py) to the absolute path to `rspin/`.
+2. Copy the `s3prl_py/rspin` directory to `s3prl` so that the toolkit can load the models.
+```bash
+cp -R s3prl_py/rspin ../s3prl/s3prl/upstream/rspin
+```
+3. Add the following line to `../s3prl/s3prl/hub.py`:
+```python
+from s3prl.upstream.rspin.hubconf import *
+```
+4. Try loading R-Spin models with the following methods
+```python
+from s3prl.nn import S3PRLUpstream
+
+# Method 1 (download checkpoints manually with the provided links)
+model = S3PRLUpstream("rspin_local", path_or_url="/path/to/checkpoint")
+
+# Method 2 (download checkpoint with s3prl)
+model = S3PRLUpstream("rspin_wavlm_32_40k")
+```
+
 ## References
 
 * [WavLM](https://github.com/microsoft/unilm/tree/master/wavlm)
+* [s3prl](https://github.com/s3prl/s3prl)
+* [PyTorch](https://pytorch.org/)
+* [spin](https://github.com/vectominist/spin)
 
 
 ## Contact

@@ -1,5 +1,6 @@
 .DS_Store
 test.py
+test_s3prl.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
