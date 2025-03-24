@@ -28,7 +28,7 @@ Please cite our paper if you find this repository and/or the paper useful.
 
 1. Install the latest [PyTorch](https://pytorch.org/) and [soundfile](https://github.com/bastibe/python-soundfile).
     ```bash
-    pip install torch soundfile
+    pip install torch soundfile librosa
     ```
 2. Download checkpoint (WavLM + R-Spin):
 
@@ -95,6 +95,26 @@ model = S3PRLUpstream("rspin_local", path_or_url="/path/to/checkpoint")
 # Method 2 (download checkpoint with s3prl)
 model = S3PRLUpstream("rspin_wavlm_32_40k")
 ```
+
+## Application: End-to-end ASR (S3PRL)
+After training an ASR model with the [s3prl](https://github.com/s3prl/s3prl) toolkit, you may use the model to transcribe speech.
+```python
+import torch
+from rspin import RSpinASR
+
+device = torch.device("cuda")
+asr_model = RSpinASR.load_from_checkpoint(
+    "/path/to/s3prl/checkpoint", "/path/to/rspin/checkpoint", device=device
+)
+asr_model.eval()
+
+with torch.no_grad():
+    audio_paths = ["/audio/file/1", "/audio/file/2"]
+    results = asr_model(audio_paths=audio_paths)
+    for transcription in results["transcription"]:
+        print(transcription)
+```
+
 
 ## References
 
